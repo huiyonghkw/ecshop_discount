@@ -13,7 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Models\Goods::class, function (Faker\Generator $faker) {
-    $units = [
+    $supermarks = [
     	'越南草虾',
     	'优选黄柠檬',
     	'冷冻榴莲果肉',
@@ -31,8 +31,13 @@ $factory->define(App\Models\Goods::class, function (Faker\Generator $faker) {
     	'鸡胸肉片',
         '美国进口饮料亚利桑那冰茶茶饮料'
     ];
+    $units = [
+        '克',
+        '斤',
+        '升'
+    ];
     return [
-        'name' => $faker->randomElement($units),
+        'name' => $faker->randomElement($supermarks) . $faker->numberBetween(10, 200) . $faker->randomElement($units), 
         'description' => $faker->realText(191, 5),
         'barcode' => $faker->isbn13,
         'price' => $faker->numberBetween(1, 9900),

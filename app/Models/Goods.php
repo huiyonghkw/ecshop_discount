@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Goods extends Model
 {
     protected $table = 'goodses';
+
+
+    public function discounts()
+    {
+        return $this->belongsToMany(Discount::class)->withTimestamps();
+    }
 }

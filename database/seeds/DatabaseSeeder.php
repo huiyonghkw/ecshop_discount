@@ -11,10 +11,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // factory(App\User::class, 50)->create();
-        // factory(App\Models\GoodsAttribute::class, 7)->create();
         $this->call(GoodsAttributeSeeder::class);
         $this->call(GoodsCategorySeeder::class);
-        factory(App\Models\Goods::class, 50)->create();
+        $this->call(DiscountSeeder::class);
+        //Create 50 goodses
+        factory(App\Models\Goods::class, 50)->create()->each(function ($goods) {
+            $discount = App\Models\Discount::find(rand(1, 2));
+            $goods->discounts()->save($discount);
+        });
+        //Add discount for goodes
+       $goodses = App\Models\Goods::get()->filter(function ($goods) {
+           return $goods->id % 2;
+       });
+
+        $goodses->each(function ($goods) {
+            $discount = App\Models\Discount::find(rand(1, 2));
+            $goods->discounts()->save($discount);
+        });
     }
 }
