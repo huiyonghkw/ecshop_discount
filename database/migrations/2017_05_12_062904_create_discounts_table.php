@@ -18,8 +18,8 @@ class CreateDiscountsTable extends Migration
             $table->string('title', 191)->default('')->comment('折扣标题');
             $table->string('description', 191)->default('')->comment('折扣描述');
             $table->unsignedTinyInteger('priority')->default(0)->comment('折扣优先级');
-            $table->timestamp('start_at')->comment('开始时间');
-            $table->timestamp('end_at')->comment('结束时间');
+            $table->timestamp('start_at')->nullable()->comment('开始时间');
+            $table->timestamp('end_at')->nullable()->comment('结束时间');
             $table->timestamps();
             $table->softDeletes();
         });
