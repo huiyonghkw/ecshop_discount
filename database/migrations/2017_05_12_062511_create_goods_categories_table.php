@@ -15,7 +15,10 @@ class CreateGoodsCategoriesTable extends Migration
     {
         Schema::create('goods_categories', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name', 45)->default('')->comment('商品类型名称');
+            $table->integer('parent_id', false, true)->default(0)->comment('父级ID');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

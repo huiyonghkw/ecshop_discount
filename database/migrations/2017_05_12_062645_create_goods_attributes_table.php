@@ -15,7 +15,10 @@ class CreateGoodsAttributesTable extends Migration
     {
         Schema::create('goods_attributes', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedTinyInteger('class')->default(0)->comment('属性类别，由程序自定义 0 商品数量单位');
+            $table->string('attribute', 45)->default('')->comment('属性值');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

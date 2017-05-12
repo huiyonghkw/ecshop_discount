@@ -15,6 +15,8 @@ class CreateDiscountGoodsTable extends Migration
     {
         Schema::create('discount_goods', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('discount_id')->default(0)->comment('折扣ID');
+            $table->unsignedInteger('goods_id')->default(0)->comment('商品ID');
             $table->timestamps();
         });
     }

@@ -15,6 +15,10 @@ class CreateShoppingCartsTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('goods_id')->default(0)->comment('商品ID');
+            $table->unsignedSmallInteger('quantity')->default(0)->comment('商品数量');
+            $table->unsignedMediumInteger('price')->default(0)->comment('单价，单位：分');
+            $table->unsignedInteger('discount_id')->default(0)->comment('折扣ID');
             $table->timestamps();
         });
     }
