@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Faker\Factory;
+use Faker\Generator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
          * Laravel 5.4 uses the utf8mb4 character set by default, which includes support for storing "emojis" in the database. If you are running a version of MySQL older than the 5.7.7 release or MariaDB older than the 10.2.2 release
          */
         Schema::defaultStringLength(191);
+
+        $this->app->singleton(Generator::class, function () {
+            return Factory::create('zh_CN');
+        });
+
     }
 
     /**
