@@ -14,12 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/home', function () {
+    return view('home');
+});
 Auth::routes();
 Route::group(
-	[
-	    'namespace' => 'Web', 
-	],
-	function ($route) {
-	    $route->resource('goodses', 'GoodsController');
-	}
+    [
+        'namespace' => 'Web',
+    ],
+    function ($route) {
+        $route->resource('goodses', 'GoodsController');
+    }
 );

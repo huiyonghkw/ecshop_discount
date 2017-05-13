@@ -8,8 +8,6 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-window.VueResource = require('vue-resource');
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -18,9 +16,20 @@ window.VueResource = require('vue-resource');
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('search-goods', require('./components/SearchGoods.vue'));
-// Vue.http.options.root = '/root';
-// Vue.http.headers.common['Authorization'] = 'token ea60d37d2d3713568bf1117b2c7e1bfe4c9c8958';
-Vue.use(window.VueResource);
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue')
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue')
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue')
+);
 
 const app = new Vue({
     el: '#app'
