@@ -5,6 +5,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">商品检索...</div>
                 <div class="panel-body">
+                    
                 </div>
             </div>
         </div>
