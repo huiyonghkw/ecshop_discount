@@ -20,9 +20,10 @@ Route::get('/home', function () {
 Auth::routes();
 Route::group(
     [
-        'namespace' => 'Web',
+        'namespace' => 'Web'
     ],
     function ($route) {
         $route->resource('goodses', 'GoodsController');
+        $route->resource('shopping_carts', 'ShoppingCartController');
     }
 );

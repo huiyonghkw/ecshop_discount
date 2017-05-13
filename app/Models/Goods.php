@@ -32,6 +32,15 @@ class Goods extends Model
     	if (!$this->discounts()) {
     		return '<button type="button" class="btn btn-xs btn-success">暂无优惠</button>';
     	}
-    	return '<button type="button" class="btn btn-xs btn-danger">' . $this->discounts()->orderBy('priority', 'ASC')->first()->title . '</button>';
+    	return '<button type="button" class="btn btn-xs btn-danger">' . $this->betterDiscount()->title . '</button>';
+    }
+
+    /**
+     * 更加优惠的折扣
+     * @return Discount
+     */
+    public function betterDiscount()
+    {
+    	return $this->discounts()->orderBy('priority', 'ASC')->first();
     }
 }

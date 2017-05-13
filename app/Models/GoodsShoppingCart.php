@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ShoppingCart extends Model
+class GoodsShoppingCart extends Model
 {
- 	/**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'total_goods', 'total_amount', 'save_amount'
+        'goods_id', 'shopping_cart_id', 'quantity',
+        'free_quantity', 'discount_id', 'total_amount', 'save_amount'
     ];
 }

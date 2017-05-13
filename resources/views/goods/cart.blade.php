@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
     <div class="row">
-    <form action="">
+    <form action="{{ route('shopping_carts.store') }}" method="post">
         {{ csrf_field() }}
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -22,7 +22,7 @@
                         <tbody>
                             @foreach ($goodses as $goods)
                                 <tr>
-                                    <input type="hidden" name="goods_id" value="{{ $goods->id }}">
+                                    <input type="hidden" name="goods_id[]" value="{{ $goods->id }}">
                                     <th scope="row">{{ $goods->id }}</th>
                                     <td>{{ $goods->name }}</td>
                                     <td>
@@ -33,9 +33,9 @@
                                     </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-xs-2">
+                                            <div class="col-xs-4">
                                                 <div class="form-group {{ $errors->has('quantity') ? 'has-error': '' }}">
-                                                     <input type="text" class="form-control" name="quantity">
+                                                     <input type="text" class="form-control" name="quantity[]">
                                                     @if ($errors->has('quantity'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('quantity') }}</strong>
