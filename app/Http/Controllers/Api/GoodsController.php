@@ -45,7 +45,7 @@ class GoodsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

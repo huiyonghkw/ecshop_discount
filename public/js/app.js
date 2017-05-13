@@ -1763,6 +1763,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1771,7 +1786,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     data: function data() {
         return {
             options: [],
-            accessToken: null
+            accessToken: null,
+            goodses: null
         };
     },
 
@@ -1792,9 +1808,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         /**
          * Search goodses
-         * @param  {[type]} search  [description]
-         * @param  {[type]} loading [description]
-         * @return {[type]}         [description]
+         * @param string search 
+         * @param function loading
+         * @return void       
          */
         getOptions: function getOptions(search, loading) {
             var _this = this;
@@ -1848,22 +1864,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     _this2.form.errors = ['Something went wrong. Please try again.'];
                 }
             });
+        },
+
+
+        /**
+         * Submit the goodses
+         * @param string val 
+         * @return void
+         */
+        consoleCallback: function consoleCallback(val) {
+            this.goodses = val;
         }
-    },
-
-    loadingGoodses: function loadingGoodses() {
-        var _this3 = this;
-
-        axios.create({
-            headers: { 'Authorization': 'Bearer ' + this.accessToken }
-        }).get('/api/goodses').then(function (resp) {
-            var opts = [];
-            var objects = resp.data;
-            for (var i = 0; i < objects.length; i++) {
-                opts.push(objects[i]);
-            }
-            _this3.options = opts;
-        });
     }
 });
 
@@ -31947,19 +31958,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_vm._v("商品检索...")]), _vm._v(" "), _c('div', {
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
   }, [_c('v-select', {
     attrs: {
       "multiple": "",
+      "on-change": _vm.consoleCallback,
       "debounce": 250,
       "options": _vm.options,
       "on-search": _vm.getOptions,
       "placeholder": "请输入商品名称加入购物车"
     }
-  })], 1)]), _vm._v(" "), _c('div', {
+  })], 1), _vm._v(" "), _vm._m(1)])]), _vm._v(" "), _c('div', {
     attrs: {
       "col-md-12": ""
     }
@@ -31969,6 +31981,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-heading"
   }, [_vm._v("私人访问令牌 AccessToken")]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.goodses),
+      expression: "goodses"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "hidden",
+      "name": "goodses"
+    },
+    domProps: {
+      "value": (_vm.goodses)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.goodses = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
   }, [_c('textarea', {
     directives: [{
       name: "model",
@@ -31989,8 +32026,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.accessToken = $event.target.value
       }
     }
-  })])])])])])])
-},staticRenderFns: []}
+  })])])])])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('h1', [_vm._v("商品检索...")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "form-group"
+  }, [_c('button', {
+    staticClass: "btn btn-block btn-primary",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_vm._v("加入购物车")])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

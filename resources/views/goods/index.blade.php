@@ -1,4 +1,7 @@
 @extends('layouts.web.app')
 @section('content')
-	<search-goods></search-goods>
+    <form action="{{ route('goodses.store') }}" method="post">
+        {{ csrf_field() }}
+        <search-goods></search-goods>
+    </form>
 @endsection

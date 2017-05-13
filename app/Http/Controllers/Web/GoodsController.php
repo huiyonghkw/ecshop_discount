@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
+// use App\Http\Requests\Web\Goods\StoreRequest;
 use App\Http\Controllers\Controller;
+use App\Models\Goods;
 
 class GoodsController extends Controller
 {
@@ -35,7 +37,15 @@ class GoodsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (! $request->has('goodses')) {
+            abort(404);
+        }
+        
+        $goodsNames = explode(',', $request->get('goodses'));
+        $goodses = Goods::whereIn('name', $goodsNames)->get();
+
+        return view('goods.cart', compact('goodses'));
+
     }
 
     /**

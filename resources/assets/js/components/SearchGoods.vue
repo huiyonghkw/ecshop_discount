@@ -1,11 +1,19 @@
 <template>
     <div class="container">
     <div class="row">
+
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">商品检索...</div>
+                <div class="panel-heading"><h1>商品检索...</h1></div>
                 <div class="panel-body">
-                    <v-select multiple :debounce="250" :options="options" :on-search="getOptions" placeholder="请输入商品名称加入购物车"></v-select>
+                    <div class="form-group">
+                        <v-select multiple :on-change="consoleCallback"  :debounce="250" :options="options" :on-search="getOptions" placeholder="请输入商品名称加入购物车" ></v-select>    
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-primary">加入购物车</button>
+                    </div>
+                    
                 </div>
             </div>
 
@@ -13,24 +21,32 @@
                 <div class="panel panel-default">
                 <div class="panel-heading">私人访问令牌 AccessToken</div>
                 <div class="panel-body">
-                    <textarea class="form-control" rows="10" v-model="accessToken"></textarea>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="goodses" v-model="goodses">    
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-control" rows="10" v-model="accessToken"></textarea>    
+                    </div>
                 </div>
             </div>
             </div>
         </div>
+    
     </div>
-</div>
+    </div>
 </template>
 
 <script>
 import vSelect from "vue-select"
-  export default {
+export default {
     components: {vSelect},
 
     data() {
         return {
             options: [],
-            accessToken: null
+            accessToken: null,
+            goodses: null,
         }
     },
 
@@ -49,9 +65,9 @@ import vSelect from "vue-select"
 
         /**
          * Search goodses
-         * @param  {[type]} search  [description]
-         * @param  {[type]} loading [description]
-         * @return {[type]}         [description]
+         * @param string search 
+         * @param function loading
+         * @return void       
          */
         getOptions(search, loading) {
             loading(true)
@@ -91,32 +107,26 @@ import vSelect from "vue-select"
             };
 
             axios.post('/oauth/personal-access-tokens', data)
-                .then(response => {
-                    this.accessToken = response.data.accessToken;
-                })
-                .catch (error => {
-                    if (typeof error.response.data === 'object') {
-                        this.form.errors = _.flatten(_.toArray(error.response.data));
-                    } else {
-                        this.form.errors = ['Something went wrong. Please try again.'];
-                    }
-                });
-            }
+            .then(response => {
+                this.accessToken = response.data.accessToken;
+            })
+            .catch (error => {
+                if (typeof error.response.data === 'object') {
+                    this.form.errors = _.flatten(_.toArray(error.response.data));
+                } else {
+                    this.form.errors = ['Something went wrong. Please try again.'];
+                }
+            });
         },
 
-        loadingGoodses() {
-            axios.create({
-                headers: {'Authorization': 'Bearer ' + this.accessToken} 
-            })
-            .get('/api/goodses')
-            .then(resp => {
-                var opts = [];
-                var objects = resp.data;
-                for (var i = 0; i < objects.length; i++) {
-                    opts.push(objects[i]);
-                }
-                this.options = opts;
-            })
+        /**
+         * Submit the goodses
+         * @param string val 
+         * @return void
+         */
+        consoleCallback(val) {
+            this.goodses = val;
         }
-  }
+    }
+}
 </script>
