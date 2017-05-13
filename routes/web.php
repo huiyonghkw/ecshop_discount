@@ -23,7 +23,3 @@ Route::group(
 	    $route->resource('goodses', 'GoodsController');
 	}
 );
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
