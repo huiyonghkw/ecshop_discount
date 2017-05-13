@@ -73,14 +73,14 @@
 
         @yield('content')
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]); !!}
     </script>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
+    
 </body>
 </html>
