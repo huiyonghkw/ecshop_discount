@@ -1763,26 +1763,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a },
+
     data: function data() {
         return {
-            options: null,
-            tokens: [],
+            options: [],
             accessToken: null
         };
     },
+
 
     /**
      * Prepare the component (Vue 2.x).
@@ -1792,18 +1784,35 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
 
+    /**
+     * Functions
+     * @type {Object}
+     */
     methods: {
+
+        /**
+         * Search goodses
+         * @param  {[type]} search  [description]
+         * @param  {[type]} loading [description]
+         * @return {[type]}         [description]
+         */
         getOptions: function getOptions(search, loading) {
             var _this = this;
 
-            var instance = axios.create({
-                headers: { 'Authorization': 'Bearer ' + this.accessToken }
-            });
             loading(true);
-            instance.get('/api/goodses', {
-                search: search
+            axios.create({
+                headers: { 'Authorization': 'Bearer ' + this.accessToken }
+            }).get('/api/goodses', {
+                params: {
+                    search: search
+                }
             }).then(function (resp) {
-                _this.options = resp.data.items;
+                var opts = [];
+                var objects = resp.data;
+                for (var i = 0; i < objects.length; i++) {
+                    opts.push(objects[i]);
+                }
+                _this.options = opts;
                 loading(false);
             });
         },
@@ -1813,21 +1822,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         * Prepare the component (Vue 2.x).
         */
         prepareComponent: function prepareComponent() {
-            // this.getTokens();
             this.createAccessToken();
+            // this.loadingGoodses();
         },
 
 
         /**
-         * Get all of the personal access tokens for the user.
+         * Create access token
+         * @return void
          */
-        // getTokens() {
-        //     axios.get('/oauth/personal-access-tokens')
-        //             .then(response => {
-        //                 this.tokens = response.data;
-        //             });
-        // },
-
         createAccessToken: function createAccessToken() {
             var _this2 = this;
 
@@ -1838,7 +1841,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             axios.post('/oauth/personal-access-tokens', data).then(function (response) {
                 _this2.accessToken = response.data.accessToken;
-                console.log(response.data.accessToken);
             }).catch(function (error) {
                 if (_typeof(error.response.data) === 'object') {
                     _this2.form.errors = _.flatten(_.toArray(error.response.data));
@@ -1847,6 +1849,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
             });
         }
+    },
+
+    loadingGoodses: function loadingGoodses() {
+        var _this3 = this;
+
+        axios.create({
+            headers: { 'Authorization': 'Bearer ' + this.accessToken }
+        }).get('/api/goodses').then(function (resp) {
+            var opts = [];
+            var objects = resp.data;
+            for (var i = 0; i < objects.length; i++) {
+                opts.push(objects[i]);
+            }
+            _this3.options = opts;
+        });
     }
 });
 
@@ -31936,11 +31953,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-body"
   }, [_c('v-select', {
     attrs: {
+      "multiple": "",
       "debounce": 250,
-      "on-search": _vm.getOptions,
       "options": _vm.options,
-      "placeholder": "Search GitHub Repositories...",
-      "label": "full_name"
+      "on-search": _vm.getOptions,
+      "placeholder": "请输入商品名称加入购物车"
     }
   })], 1)]), _vm._v(" "), _c('div', {
     attrs: {

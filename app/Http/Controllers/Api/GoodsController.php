@@ -21,7 +21,9 @@ class GoodsController extends Controller
                                             ->orWhere('description', 'LIKE', '%' . $request->search . '%');
                                 }
                             })
+                            ->select('name')
                             ->get()
+                            ->pluck('name')
                             ->toJson();
     }
 

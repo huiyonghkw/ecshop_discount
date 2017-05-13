@@ -5,14 +5,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">商品检索...</div>
                 <div class="panel-body">
-                        <v-select
-                            :debounce="250"
-                            :on-search="getOptions"
-                            :options="options"
-                            placeholder="Search GitHub Repositories..."
-                            label="full_name"
-                        >
-                        </v-select>
+                    <v-select multiple :debounce="250" :options="options" :on-search="getOptions" placeholder="请输入商品名称加入购物车"></v-select>
                 </div>
             </div>
 
@@ -25,23 +18,22 @@
             </div>
             </div>
         </div>
-            
-
-
     </div>
 </div>
 </template>
+
 <script>
 import vSelect from "vue-select"
   export default {
     components: {vSelect},
+
     data() {
         return {
-            options: null,
-            tokens: [],
+            options: [],
             accessToken: null
         }
     },
+
     /**
      * Prepare the component (Vue 2.x).
      */
@@ -49,16 +41,33 @@ import vSelect from "vue-select"
         this.prepareComponent();
     },
 
+    /**
+     * Functions
+     * @type {Object}
+     */
     methods: {
+
+        /**
+         * Search goodses
+         * @param  {[type]} search  [description]
+         * @param  {[type]} loading [description]
+         * @return {[type]}         [description]
+         */
         getOptions(search, loading) {
-            var instance = axios.create({
-              headers: {'Authorization': 'Bearer ' + this.accessToken}
-            });
             loading(true)
-            instance.get('/api/goodses', {
-                search: search
+            axios.create({
+                headers: {'Authorization': 'Bearer ' + this.accessToken} 
+            }).get('/api/goodses', {
+                params: {
+                    search: search    
+                }
             }).then(resp => {
-                this.options = resp.data.items
+                var opts = [];
+                var objects = resp.data;
+                for (var i = 0; i < objects.length; i++) {
+                    opts.push(objects[i]);
+                }
+                this.options = opts;
                 loading(false)
             })
         },
@@ -67,20 +76,14 @@ import vSelect from "vue-select"
          * Prepare the component (Vue 2.x).
          */
         prepareComponent() {
-            // this.getTokens();
             this.createAccessToken();
+            // this.loadingGoodses();
         },
 
         /**
-         * Get all of the personal access tokens for the user.
+         * Create access token
+         * @return void
          */
-        // getTokens() {
-        //     axios.get('/oauth/personal-access-tokens')
-        //             .then(response => {
-        //                 this.tokens = response.data;
-        //             });
-        // },
-
         createAccessToken() {
             const data = {
                 name: 'ecshop_discount',
@@ -90,7 +93,6 @@ import vSelect from "vue-select"
             axios.post('/oauth/personal-access-tokens', data)
                 .then(response => {
                     this.accessToken = response.data.accessToken;
-                    console.log(response.data.accessToken);
                 })
                 .catch (error => {
                     if (typeof error.response.data === 'object') {
@@ -99,7 +101,22 @@ import vSelect from "vue-select"
                         this.form.errors = ['Something went wrong. Please try again.'];
                     }
                 });
+            }
+        },
+
+        loadingGoodses() {
+            axios.create({
+                headers: {'Authorization': 'Bearer ' + this.accessToken} 
+            })
+            .get('/api/goodses')
+            .then(resp => {
+                var opts = [];
+                var objects = resp.data;
+                for (var i = 0; i < objects.length; i++) {
+                    opts.push(objects[i]);
+                }
+                this.options = opts;
+            })
         }
-    }
-}
+  }
 </script>
