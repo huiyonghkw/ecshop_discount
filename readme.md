@@ -75,7 +75,7 @@ $ php artisan db:seed
 
 ```bash
 
-$ php artisan passport:client --personal
+$ php artisan passport:install
 
 ```
 
