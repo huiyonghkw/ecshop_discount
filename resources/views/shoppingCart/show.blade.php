@@ -33,10 +33,16 @@
                                         <i class="fa fa-fw fa-cny"></i>{{ $goods->unit_price }}
                                     </td>
                                     <td>
-                                        {{ $goods->pivot->quantity }} {{ $goods->goodsAttribute->attribute }}
+                                        {{ $goods->pivot->quantity }} 
+                                        @if (isset($goods->goodsAttribute))
+                                            {{ $goods->goodsAttribute->attribute }}
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $goods->pivot->free_quantity }} {{ $goods->goodsAttribute->attribute }}
+                                        {{ $goods->pivot->free_quantity }} 
+                                        @if (isset($goods->goodsAttribute))
+                                            {{ $goods->goodsAttribute->attribute }}
+                                        @endif
                                     </td>
                                     <td><i class="fa fa-fw fa-cny"></i>{{ $goods->pivot->total_amount / 100 }}</td>
                                     <td><i class="fa fa-fw fa-cny"></i>{{ $goods->pivot->save_amount / 100 }}</td>
@@ -65,7 +71,10 @@
                                         <tr>
                                             <td>{{ $goods->name }}</td>
                                             <td>
-                                                {{ $goods->pivot->free_quantity }} {{ $goods->goodsAttribute->attribute }}
+                                                {{ $goods->pivot->free_quantity }} 
+                                                @if (isset($goods->goodsAttribute))
+                                                    {{ $goods->goodsAttribute->attribute }}
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

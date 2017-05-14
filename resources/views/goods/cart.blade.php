@@ -37,7 +37,11 @@
                                                 <div class="form-group {{ $errors->has('quantity') ? 'has-error': '' }}">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" name="quantity[]">
-                                                        <div class="input-group-addon">{{ $goods->goodsAttribute->attribute }}</div>
+                                                        <div class="input-group-addon">
+                                                        @if (isset($goods->goodsAttribute))
+                                                            {{ $goods->goodsAttribute->attribute }}
+                                                        @endif
+                                                        </div>
                                                         @if ($errors->has('quantity'))
                                                             <span class="help-block">
                                                                 <strong>{{ $errors->first('quantity') }}</strong>
