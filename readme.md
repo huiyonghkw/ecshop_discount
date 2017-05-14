@@ -14,7 +14,7 @@
 - Vue 2
     + vue-select 实现异步筛选商品
 - Yarn 安装并管理前端资源依赖
-
+- macOS Shadowsocks 搭建收费VPN
 
 ## 项目运行流程
 
@@ -44,7 +44,7 @@ $ npm run prod
 
 ```bash
 
-$ copy .env.example .env
+$ cp .env.example .env
 
 $ php artisan migrate
 
