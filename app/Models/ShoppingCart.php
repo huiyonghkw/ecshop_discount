@@ -17,7 +17,7 @@ class ShoppingCart extends Model
 
     public function goodses()
     {
-        return $this->belongsToMany(Goods::class)->withPivot('quantity', 'free_quantity', 'total_amount', 'save_amount');
+        return $this->belongsToMany(Goods::class)->withPivot('quantity', 'free_quantity', 'total_amount', 'save_amount', 'discount_id');
     }
 
     public function getFormatTotalAmountAttribute()

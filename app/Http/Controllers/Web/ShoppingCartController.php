@@ -13,16 +13,6 @@ use App\Models\GoodsShoppingCart;
 class ShoppingCartController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -59,7 +49,7 @@ class ShoppingCartController extends Controller
                 //获取优惠信息
                 $goods = $this->discount($goods->betterDiscount(), $goods, intval($quantities[$index]));
                 $this->addShoppingCartGoods($goods, $shoppingCart);
-                DB::commit(); 
+                DB::commit();
             });
         } catch (\Exception $e) {
             $message = $e->getTraceAsString();
@@ -75,17 +65,16 @@ class ShoppingCartController extends Controller
 
     /**
      * 折扣运算器，时间关系，本次不作为单独的Service实现，后期可以通过折扣服务层完成折扣金额运算
-     * @param  Discount $discount 
-     * @param  Goods    $goods    
-     * @param  integer  $quantities 
-     * @return integer             
+     * @param  Discount $discount
+     * @param  Goods    $goods
+     * @param  integer  $quantities
+     * @return integer
      */
     public function discount(
         Discount $discount,
         Goods $goods,
         $quantities
-        )
-    {
+        ) {
         switch ($discount->mark) {
             //买二赠一
             case Discount::THREE_FOR_TWO:
@@ -104,12 +93,12 @@ class ShoppingCartController extends Controller
 
     /**
      * 买二赠一
-     * @param  Goods $goods      
-     * @param  integer $quantities 
-     * @return void             
+     * @param  Goods $goods
+     * @param  integer $quantities
+     * @return void
      */
     public function buyTwoGetOneFree($goods, $quantities)
-    {  
+    {
         $goods->freeQuantities = $this->mulriple($quantities);
         $goods->quantity = $quantities;
         $goods->save_amount = $goods->freeQuantities * $goods->price;
@@ -118,17 +107,17 @@ class ShoppingCartController extends Controller
 
     /**
      * 计算赠送数量
-     * @param  integer  $max    
-     * @param  integer $number 
-     * @return  integer         
+     * @param  integer  $max
+     * @param  integer $number
+     * @return  integer
      */
-    public  function mulriple($max, $number = 2)
+    public function mulriple($max, $number = 2)
     {
         $i = 1;
-        while ( true ) {
-            if ( $number * $i > $max) {
+        while (true) {
+            if ($number * $i > $max) {
                 return ($i - 1);
-            };        
+            };
             if ($number * $i == $max) {
                 return $i;
             }
@@ -139,8 +128,8 @@ class ShoppingCartController extends Controller
      /**
      * 九五折
      * @param  Goods $goods
-     * @param  integer $quantities 
-     * @return void             
+     * @param  integer $quantities
+     * @return void
      */
     public function percentDiscount95($goods, $quantities)
     {
@@ -153,8 +142,8 @@ class ShoppingCartController extends Controller
 
     /**
      * Add shopping cart goods
-     * @param Goods $goods        
-     * @param ShippingCart $shoppingCart 
+     * @param Goods $goods
+     * @param ShippingCart $shoppingCart
      */
     public function addShoppingCartGoods($goods, $shoppingCart)
     {
@@ -173,9 +162,9 @@ class ShoppingCartController extends Controller
 
     /**
      * 更新购物车
-     * @param  ShoppingCart $shoppingCart      
-     * @param  ShoppingCartGoods $shoppingCartGoods 
-     * @return void                    
+     * @param  ShoppingCart $shoppingCart
+     * @param  ShoppingCartGoods $shoppingCartGoods
+     * @return void
      */
     public function upateShoppingCart($shoppingCart, $shoppingCartGoods)
     {
@@ -195,19 +184,39 @@ class ShoppingCartController extends Controller
     public function show($id)
     {
         $shoppingCart = ShoppingCart::findOrFail($id);
+        $threeForTwoGoodses = $this->filterThreeForTwoGoodses($shoppingCart);
+        $percentDiscount95Goodses = $this->filterPercentDiscount95Goodses($shoppingCart);
+
         // dd($shoppingCart->pivot->goodses);
-        return view('shoppingCart.show', compact('shoppingCart'));
+        return view('shoppingCart.show', compact('shoppingCart', 'threeForTwoGoodses', 'percentDiscount95Goodses'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * 筛选买二赠一商品
+     * @param ShoppingCart $shoppingCart 
+     * @return Collect               
      */
-    public function edit($id)
+    public function filterThreeForTwoGoodses($shoppingCart)
     {
-        //
+         return $shoppingCart->goodses->filter(function ($goods) {
+            if ($goods->pivot->discount_id == 1) {
+                return $goods;
+            }
+        });      
+    }
+
+    /**
+     * 筛选九五折商品
+     * @param ShoppingCart $shoppingCart 
+     * @return Collect               
+     */
+    public function filterPercentDiscount95Goodses($shoppingCart)
+    {
+        return $shoppingCart->goodses->filter(function ($goods) {
+            if ($goods->pivot->discount_id == 2) {
+                return $goods;
+            }
+        });    
     }
 
     /**
@@ -219,17 +228,8 @@ class ShoppingCartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        $shoppingCart = ShippingCart::findOrFail($id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('shoppingCart.print', compact('shoppingCart'));
     }
 }
