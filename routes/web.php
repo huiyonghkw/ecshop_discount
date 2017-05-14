@@ -12,5 +12,19 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return redirect()->route('goodses.index');
+    // return view('welcome');
 });
+Route::get('/home', function () {
+    return view('home');
+});
+Auth::routes();
+Route::group(
+    [
+        'namespace' => 'Web'
+    ],
+    function ($route) {
+        $route->resource('goodses', 'GoodsController');
+        $route->resource('shopping_carts', 'ShoppingCartController');
+    }
+);
