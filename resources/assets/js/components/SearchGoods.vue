@@ -19,14 +19,14 @@
 
             <div col-md-12>
                 <div class="panel panel-default">
-                <div class="panel-heading">私人访问令牌 AccessToken</div>
+                <div class="panel-heading"><h3>请先注册登录后获取私人访问令牌 AccessToken后购买商品</h3></div>
                 <div class="panel-body">
                     <div class="form-group">
                         <input type="hidden" class="form-control" name="goodses" v-model="goodses">    
                     </div>
 
                     <div class="form-group">
-                        <textarea class="form-control" rows="10" v-model="accessToken"></textarea>    
+                        <textarea class="form-control" rows="5" v-model="accessToken"></textarea>    
                     </div>
                 </div>
             </div>

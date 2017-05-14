@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return redirect()->route('goodses.index');
+    // return view('welcome');
 });
 Route::get('/home', function () {
     return view('home');

@@ -112,7 +112,7 @@ class ShoppingCartController extends Controller
     {  
         $goods->freeQuantities = $this->mulriple($quantities);
         $goods->quantity = $quantities;
-        $goods->save_amount = $freeQuantities * $goods->price;
+        $goods->save_amount = $goods->freeQuantities * $goods->price;
         return $goods;
     }
 
