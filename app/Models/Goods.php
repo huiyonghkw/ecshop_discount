@@ -30,9 +30,9 @@ class Goods extends Model
     public function getDisplayDiscountAttribute()
     {
     	if (!$this->discounts()) {
-    		return '<button type="button" class="btn btn-xs btn-success">暂无优惠</button>';
+    		return '<button type="button" class="btn btn-xs btn-danger">暂无优惠</button>';
     	}
-    	return '<button type="button" class="btn btn-xs btn-danger">' . $this->betterDiscount()->title . '</button>';
+    	return '<button type="button" class="btn btn-xs btn-success">' . $this->betterDiscount()->title . '</button>';
     }
 
     /**
@@ -42,5 +42,10 @@ class Goods extends Model
     public function betterDiscount()
     {
     	return $this->discounts()->orderBy('priority', 'ASC')->first();
+    }
+
+    public function goodsAttribute()
+    {
+        return $this->hasOne(GoodsAttribute::class, 'id', 'goods_attribute_id');
     }
 }

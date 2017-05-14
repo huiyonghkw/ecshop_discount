@@ -35,12 +35,15 @@
                                         <div class="row">
                                             <div class="col-xs-4">
                                                 <div class="form-group {{ $errors->has('quantity') ? 'has-error': '' }}">
-                                                     <input type="text" class="form-control" name="quantity[]">
-                                                    @if ($errors->has('quantity'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('quantity') }}</strong>
-                                                        </span>
-                                                    @endif
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="quantity[]">
+                                                        <div class="input-group-addon">{{ $goods->goodsAttribute->attribute }}</div>
+                                                        @if ($errors->has('quantity'))
+                                                            <span class="help-block">
+                                                                <strong>{{ $errors->first('quantity') }}</strong>
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

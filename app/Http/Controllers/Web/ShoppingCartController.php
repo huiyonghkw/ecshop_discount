@@ -54,16 +54,20 @@ class ShoppingCartController extends Controller
         DB::beginTransaction();
         $shoppingCart = $this->create();
         try {
-            $shoppingCart = $this->create();
-            collect($goodses)->each(function ($goodsId, $index) use ($quantities) {
-                
+            collect($goodses)->each(function ($goodsId, $index) use ($quantities, $shoppingCart) {
                 $goods = Goods::find($goodsId);
                 //获取优惠信息
-                $goods = $this->discount($goods->betterDiscount(), $goods, $quantities);
-                $this->addShippingCartGoods($goods, $shoppingCart);
+                $goods = $this->discount($goods->betterDiscount(), $goods, intval($quantities[$index]));
+                $this->addShoppingCartGoods($goods, $shoppingCart);
                 DB::commit(); 
-            });    
+            });
         } catch (\Exception $e) {
+            $message = $e->getTraceAsString();
+            // $code = $e->getCode();
+            $file = $e->getFile();
+            $line = $e->getLine();
+            logger($file . ":" . $line);
+            logger($message);
             DB::rollback();
         }
         return redirect()->route('shopping_carts.show', $shoppingCart->id);
@@ -82,20 +86,18 @@ class ShoppingCartController extends Controller
         $quantities
         )
     {
-        switch ($discount) {
+        switch ($discount->mark) {
             //买二赠一
-            case $discount->mark == Discount::THREE_FOR_TWO:
-                    if ($goods->discount_id == $discount->id) {
+            case Discount::THREE_FOR_TWO:
+                    if ($goods->betterDiscount()->id== $discount->id) {
                         return $this->buyTwoGetOneFree($goods, $quantities);
                     }
                 break;
-            case $discount->mark == Discount::PERCENT_DISCOUNT_95:
-                    if ($goods->discount_id == $discount->id) {
+            //九五折
+            case Discount::PERCENT_DISCOUNT_95:
+                    if ($goods->betterDiscount()->id == $discount->id) {
                         return $this->percentDiscount95($goods, $quantities);
                     }
-                break;
-            default:
-                # code...
                 break;
         }
     }
@@ -109,8 +111,8 @@ class ShoppingCartController extends Controller
     public function buyTwoGetOneFree($goods, $quantities)
     {  
         $goods->freeQuantities = $this->mulriple($quantities);
-        $goods->quantity = $quantities - $goods->freeQuantities;
-        $goods->save_amount = 0;
+        $goods->quantity = $quantities;
+        $goods->save_amount = $freeQuantities * $goods->price;
         return $goods;
     }
 
@@ -142,20 +144,21 @@ class ShoppingCartController extends Controller
      */
     public function percentDiscount95($goods, $quantities)
     {
-        $goods->save_amount = $goods->price * 0.95;
+        //抹去小数点
+        $goods->save_amount = intval($goods->price * 0.05);
         $goods->quantity = $quantities;
         $goods->freeQuantities = 0;
         return $goods;
     }
 
     /**
-     * Add shipping cart goods
+     * Add shopping cart goods
      * @param Goods $goods        
      * @param ShippingCart $shoppingCart 
      */
-    public function addShippingCartGoods($goods, $shoppingCart)
+    public function addShoppingCartGoods($goods, $shoppingCart)
     {
-        $cartGoods = GoodsShippingCart::create([
+        $shoppingCartGoods = GoodsShoppingCart::create([
             'goods_id' => $goods->id,
             'shopping_cart_id' => $shoppingCart->id,
             'quantity' => $goods->quantity,
@@ -163,13 +166,23 @@ class ShoppingCartController extends Controller
             'discount_id' => $goods->discount_id,
             'discount_id' => $goods->betterDiscount()->id,
             'total_amount' => $goods->quantity * $goods->price,
-            'save_amount' => $goods->save_amount() * $goods->quantity,
+            'save_amount' => $goods->save_amount * $goods->quantity,
         ]);
+        $this->upateShoppingCart($shoppingCart, $shoppingCartGoods);
+    }
 
-        $shippingCart->update($shippingCart, [
-            'total_goods' => $shippingCart->total_goods + 1,
-            'total_amount' => $shippingCart->total_amount + $cartGoods->total_amount,
-            'save_amount' => $shippingCart->save_amount + $cartGoods->save_amount,
+    /**
+     * 更新购物车
+     * @param  ShoppingCart $shoppingCart      
+     * @param  ShoppingCartGoods $shoppingCartGoods 
+     * @return void                    
+     */
+    public function upateShoppingCart($shoppingCart, $shoppingCartGoods)
+    {
+        $shoppingCart->update([
+            'total_goods' => $shoppingCart->total_goods + 1,
+            'total_amount' => $shoppingCart->total_amount + $shoppingCartGoods->total_amount,
+            'save_amount' => $shoppingCart->save_amount + $shoppingCartGoods->save_amount,
         ]);
     }
 
@@ -181,7 +194,9 @@ class ShoppingCartController extends Controller
      */
     public function show($id)
     {
-        //
+        $shoppingCart = ShoppingCart::findOrFail($id);
+        // dd($shoppingCart->pivot->goodses);
+        return view('shoppingCart.show', compact('shoppingCart'));
     }
 
     /**
