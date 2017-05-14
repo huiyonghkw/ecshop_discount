@@ -18,9 +18,9 @@
                                 <th>单价</th>
                                 <th>购买量</th>
                                 <th>赠送数量</th>
-                                <th>折扣信息</th>
                                 <th>小计金额</th>
                                 <th>节省金额</th>
+                                <th>折扣信息</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,11 +38,11 @@
                                     <td>
                                         {{ $goods->pivot->free_quantity }} {{ $goods->goodsAttribute->attribute }}
                                     </td>
+                                    <td><i class="fa fa-fw fa-cny"></i>{{ $goods->pivot->total_amount / 100 }}</td>
+                                    <td><i class="fa fa-fw fa-cny"></i>{{ $goods->pivot->save_amount / 100 }}</td>
                                     <td>
                                         {!! $goods->display_discount !!}
                                     </td>
-                                    <td><i class="fa fa-fw fa-cny"></i>{{ $goods->pivot->total_amount / 100 }}</td>
-                                    <td><i class="fa fa-fw fa-cny"></i>{{ $goods->pivot->save_amount / 100 }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -165,8 +165,8 @@ class ShoppingCartController extends Controller
             'free_quantity' => $goods->freeQuantities,
             'discount_id' => $goods->discount_id,
             'discount_id' => $goods->betterDiscount()->id,
-            'total_amount' => $goods->quantity * $goods->price,
-            'save_amount' => $goods->save_amount * $goods->quantity,
+            'total_amount' => ($goods->quantity - $goods->freeQuantities) * $goods->price,
+            'save_amount' => $goods->freeQuantities == 0 ? $goods->save_amount : $goods->freeQuantities * $goods->price,
         ]);
         $this->upateShoppingCart($shoppingCart, $shoppingCartGoods);
     }
