@@ -56,11 +56,19 @@ $ php artisan migrate
 
 $ php artisan db:seed
 
+```
+
+4.1.开发过程中可以使用这样的方式再次生成数据
+
+```bash
+
 $ php artisan migrate:refresh
 
 $ php artisan db:seed
 
 ```
+
+
 5.生成OAuth2.0私人访问令牌
 
 ```bash
