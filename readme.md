@@ -13,6 +13,7 @@
     + fzaninotto/faker 完成测试数据自动填充
 - Vue 2
     + vue-select 实现异步筛选商品
+    + element-ui 饿了么前端团队开放的Vue UI 框架
 - Yarn 安装并管理前端资源依赖
 - macOS Shadowsocks 搭建收费VPN
 

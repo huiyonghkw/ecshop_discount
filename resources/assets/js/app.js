@@ -8,6 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-default/index.css';
+Vue.use(ElementUI);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -16,6 +20,7 @@ window.Vue = require('vue');
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('search-goods', require('./components/SearchGoods.vue'));
+Vue.component('input-number', require('./components/InputNumber.vue'));
 Vue.component(
     'passport-clients',
     require('./components/passport/Clients.vue')

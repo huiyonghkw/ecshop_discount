@@ -35,7 +35,7 @@
                                         <div class="row">
                                             <div class="col-xs-4">
                                                 <div class="form-group {{ $errors->has('quantity') ? 'has-error': '' }}">
-                                                    <div class="input-group">
+                                                    {{-- <div class="input-group">
                                                         <input type="text" class="form-control" name="quantity[]">
                                                         <div class="input-group-addon">
                                                         @if (isset($goods->goodsAttribute))
@@ -47,7 +47,8 @@
                                                                 <strong>{{ $errors->first('quantity') }}</strong>
                                                             </span>
                                                         @endif
-                                                    </div>
+                                                    </div> --}}
+                                                    <input-number></input-number>
                                                 </div>
                                             </div>
                                         </div>

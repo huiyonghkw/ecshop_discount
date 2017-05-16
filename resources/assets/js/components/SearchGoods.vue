@@ -16,7 +16,6 @@
                     
                 </div>
             </div>
-
             <div col-md-12>
                 <div class="panel panel-default">
                 <div class="panel-heading"><h3>请先注册登录后获取私人访问令牌 AccessToken后购买商品</h3></div>
